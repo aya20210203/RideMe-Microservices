@@ -1,0 +1,28 @@
+
+
+.btnRegister{
+    color: white !important;
+    background-color: black !important;
+    transition: ease 0.2s !important;
+}
+
+.btnRegister:hover{
+        background-color: #4b4b4b !important;
+}
+
+.card{
+    box-shadow: 0 0.2rem 1rem rgba(44, 43, 43, 0.596);
+    background-color: #f6fafa !important;
+    color: rgb(0, 0, 0);
+    height: 80vh;
+    padding: 2rem;
+}
+
+.mainDiv label{
+    font-weight: 600;
+}
+
+.mainDiv .form-check-input:checked {
+    background-color: #000000;
+    border-color: #000000;
+}

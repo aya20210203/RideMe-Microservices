@@ -1,0 +1,54 @@
+.cardChooseDriver{
+    box-shadow: 0 0.2rem 1rem rgba(44, 43, 43, 0.596);
+    background-color: #fff;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+.table {
+    margin-top: 30px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    border: 2px solid #ddd;
+    padding: 20px 0;
+}
+
+.avatar {
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    margin-right: 2rem;
+}
+
+.avatar img {
+    width: 100%;
+}
+
+.txt {
+    flex: 1;
+}
+
+.name {
+    margin-bottom: 5px;
+}
+
+.car-type,
+.city,
+.region,
+.smoking {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.btnChooseDriver{
+    color: white !important;
+    background-color: black !important;
+    transition: ease 0.2s !important;
+}
+
+.btnChooseDriver:hover{
+        background-color: #4b4b4b !important;
+}

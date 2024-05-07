@@ -1,0 +1,18 @@
+.react-datepicker__month-container{
+  height: 300px;
+  width: 300px;
+  font-size: large;
+  padding: auto;
+  justify-content: center;
+  
+}
+.react-datepicker__month.react-datepicker__monthPicker {
+  height: 80%;
+  display: grid;
+  place-items: center;
+}
+.react-datepicker__month{
+  height: 70%;
+  display: grid;
+  place-items: center;
+}

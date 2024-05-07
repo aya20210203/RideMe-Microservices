@@ -1,0 +1,45 @@
+
+
+.btnIntroPage{
+    color: white !important;
+    background-color: black !important;
+    transition: ease 0.2s !important;
+}
+
+.btnIntroPage:hover{
+        background-color: #4b4b4b !important;
+}
+
+
+.cardIntroPage .form-check input{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.cardIntroPage .form-check-input:checked {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.cardIntroPage h3, h4{
+    margin-bottom: 2rem;
+}
+
+.cardIntroPage p{
+    font-size: 1.2rem;
+}
+
+.cardIntroPage a{
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: ease 0.2s;
+}
+
+.cardIntroPage a:hover{
+    color: #4b4b4b;
+    transition: ease 0.2s;
+}
+
+.loginDiv{
+    margin: 5rem;
+}
