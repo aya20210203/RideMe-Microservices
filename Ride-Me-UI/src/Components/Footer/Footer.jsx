@@ -40,7 +40,7 @@ const Footer = () => {
                             <ul className="list-unstyled">
                                 <p className="fw-bold fs-4">Contacts</p>
                                 <li><p><i class="fas fa-home me-3"></i> Cairo, AS 10012, EG</p></li>
-                                <li><p><i class="fas fa-envelope me-3"></i>bondokahmed.ame@gmail.com</p></li>
+                                
                                 <li><p><i class="fas fa-phone me-3"></i> +20 0111 7007 153</p></li>
                             </ul>
                         </div>

@@ -1,0 +1,142 @@
+version: "3.4"
+services:
+  ride_me_ui:
+    container_name: ride_me_ui
+    build: ./Ride-Me-UI
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./react:/app
+      - /app/node_modules
+    networks:
+      - rideme-network
+
+  admin_service:
+    container_name: admin_service
+    build: ./Admin
+    ports:
+      - 8090:8084
+    environment:
+      MYSQL_HOST: admindb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    links:
+      - admindb
+    restart: on-failure
+    depends_on:
+    - admindb
+  admindb:
+    container_name: admindb
+    image: mysql:8.0
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: admindb
+      MYSQL_ROOT_PASSWORD: root123
+
+  passenger_service:
+    container_name: passenger_service
+    build: ./Passenger
+    ports:
+      - 8085:8085
+    environment:
+      MYSQL_HOST: passengerdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    networks:
+      - rideme-network
+  passengerdb:
+    container_name: passengerdb
+    image: mysql:8.0
+#    volumes:
+#      - mysql-data-passenger:/var/lib/mysql
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: passengerdb  # Specify the database name here
+      MYSQL_ROOT_PASSWORD: root123
+    networks:
+      - rideme-network
+
+  driver1_service:
+    container_name: driver1_service
+    build: ./Driver_driver_view
+    ports:
+      - 8082:8082
+    environment:
+      MYSQL_HOST: driverdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    networks:
+      - rideme-network
+  driver2_service:
+    container_name: driver2_service
+    build: ./Driver_passegner_admin_view
+    ports:
+      - 8083:8083
+    environment:
+      MYSQL_HOST: driverdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    networks:
+      - rideme-network
+  driverdb:
+    container_name: driverdb
+    image: mysql:8.0
+    volumes:
+      - mysql-data-driver:/var/lib/mysql
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: driverdb  # Specify the database name here
+      MYSQL_ROOT_PASSWORD: root123
+    networks:
+      - rideme-network
+
+  rides1_service:
+    container_name: rides1_service
+    build: ./Rides_driver_view
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOST: ridedb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    networks:
+      - rideme-network
+  rides2_service:
+    container_name: rides2_service
+    build: ./Rides_passenger_admin_view
+    ports:
+      - 8081:8081
+    environment:
+      MYSQL_HOST: ridedb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+      MYSQL_PORT: 3306
+    networks:
+      - rideme-network
+  ridedb:
+    container_name: ridedb
+    image: mysql:8.0
+    volumes:
+      - mysql-data-ride:/var/lib/mysql
+    ports:
+      - 3310:3306
+    environment:
+      MYSQL_DATABASE: ridedb  # Specify the database name here
+      MYSQL_ROOT_PASSWORD: root123
+    networks:
+      - rideme-network
+
+volumes:
+  mysql-data-admin:
+  mysql-data-driver:
+  mysql-data-passenger:
+  mysql-data-ride:

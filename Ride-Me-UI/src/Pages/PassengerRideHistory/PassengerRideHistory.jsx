@@ -4,6 +4,7 @@ import "./PassengerRideHistory.css";
 
 const PassengerRideHistory = () => {
   const [rides, setRides] = useState();
+  const [driver81Fail, setDriver81Fail] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -17,8 +18,23 @@ const PassengerRideHistory = () => {
       .then((data) => {
         console.log(data);
         setRides(data);
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver81Fail(true);
+        }
+        console.error("Error:", error);
       });
   }, []);
+
+  if (driver81Fail) {
+    return (
+      <div className="text-center h2 text-danger m-5">
+        <p> Ride histroy is currently offline</p>
+      </div>
+    );
+  }
 
   return (
     <div>

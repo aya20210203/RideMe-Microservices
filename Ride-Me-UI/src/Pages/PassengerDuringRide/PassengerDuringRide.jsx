@@ -9,6 +9,9 @@ const PassengerDuringRide = () => {
   const [currentRideInfo, setCurrentRideInfo] = useState(null);
   const [rideStatus, setRideStatus] = useState(null);
   const [currentRideId, setCurrentRideId] = useState();
+  const [driver83Fail, setDriver83Fail] = useState();
+
+  
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -41,6 +44,13 @@ const PassengerDuringRide = () => {
         sessionStorage.setItem("currentRideSource", data[0].Source);
         sessionStorage.setItem("currentRideDestination", data[0].Destination);
         sessionStorage.setItem("currentRidePrice", data[0].Price);
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver83Fail(true);
+        }
+        console.error("Error:", error);
       });
   }, []);
 
@@ -50,17 +60,32 @@ const PassengerDuringRide = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: {}
+      body: {},
     })
-    fetch(`http://localhost:8082/Driver/available?id=${Number(sessionStorage.getItem("currentRideDriverId"))}`, {
-      method: "PUT",
-    })
+    .catch((error) => {
+      if (error instanceof TypeError) {
+        console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+        setDriver83Fail(true);
+      }
+      console.error("Error:", error);
+    });
+    fetch(
+      `http://localhost:8082/Driver/available?id=${Number(
+        sessionStorage.getItem("currentRideDriverId")
+      )}`,
+      {
+        method: "PUT",
+      }
+    )
       .then((res) => {
         if (res.ok) {
-          
         }
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver83Fail(true);
+        }
         console.error("Error:", error);
       });
     toast.success("Payment Confirmed", {
@@ -88,6 +113,14 @@ const PassengerDuringRide = () => {
       history.push("/feedback");
     }, 4000);
   };
+
+  if (driver83Fail) {
+    return (
+      <div className="text-center h2 text-danger m-5">
+        <p>Current service is offline</p>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -9,6 +9,8 @@ function FeedBack() {
   const [rating, setRating] = useState(null);
   const [feedback, setFeedback] = useState(null);
 
+  const [driver81Fail, setDriver81Fail] = useState(false);
+
   //   useEffect(() => {
   //     console.log(feedback);
   //   }, [feedback]);
@@ -42,11 +44,14 @@ function FeedBack() {
 
   const handleRatingSubmit = (e) => {
     e.preventDefault();
-  
+
     const url = new URL("http://localhost:8081/Rides/rate");
-    url.searchParams.append("id", Number(sessionStorage.getItem("currentRideId")));
+    url.searchParams.append(
+      "id",
+      Number(sessionStorage.getItem("currentRideId"))
+    );
     url.searchParams.append("rate", rating);
-  
+
     fetch(url.toString(), {
       method: "PUT",
     })
@@ -57,28 +62,44 @@ function FeedBack() {
         }
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver81Fail(true);
+        }
         console.error("Error:", error);
       });
   };
-  
+
   const handleDriverRatingSubmit = (e) => {
     e.preventDefault();
 
-    const url = new URL("http://localhost:8081/Rides/calculate-driver-avg-rating");
-    url.searchParams.append("DriverId", Number(sessionStorage.getItem("currentRideDriverId")));
+    const url = new URL(
+      "http://localhost:8081/Rides/calculate-driver-avg-rating"
+    );
+    url.searchParams.append(
+      "DriverId",
+      Number(sessionStorage.getItem("currentRideDriverId"))
+    );
     fetch(url.toString(), {
       method: "POST",
     })
-    .then((res) => {
+      .then((res) => {
         if (res.ok) {
-            return res.json();
+          return res.json();
         } else {
-            return Promise.reject(new Error("Request failed with status: " + res.status));
+          return Promise.reject(
+            new Error("Request failed with status: " + res.status)
+          );
         }
-    })
-    .then((data) => {
-        const url2 = new URL("http://localhost:8083/Driver/change-driver-avg-rating");
-        url2.searchParams.append("id", Number(sessionStorage.getItem("currentRideDriverId")));
+      })
+      .then((data) => {
+        const url2 = new URL(
+          "http://localhost:8083/Driver/change-driver-avg-rating"
+        );
+        url2.searchParams.append(
+          "id",
+          Number(sessionStorage.getItem("currentRideDriverId"))
+        );
         url2.searchParams.append("rate", data);
         fetch(url2.toString(), {
           method: "PUT",
@@ -90,18 +111,25 @@ function FeedBack() {
           .catch((error) => {
             console.error("Error:", error);
           });
-        })
-    .catch((error) => {
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver81Fail(true);
+        }
         console.error("Error:", error);
-    });
-  }
-  
+      });
+  };
+
   const handleFeedbackSubmit = (e) => {
     e.preventDefault();
     const url = new URL("http://localhost:8081/Rides/feedback");
-    url.searchParams.append("id", Number(sessionStorage.getItem("currentRideId")));
+    url.searchParams.append(
+      "id",
+      Number(sessionStorage.getItem("currentRideId"))
+    );
     url.searchParams.append("feedback", feedback);
-  
+
     fetch(url.toString(), {
       method: "PUT",
     })
@@ -112,9 +140,21 @@ function FeedBack() {
         }
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver81Fail(true);
+        }
         console.error("Error:", error);
       });
   };
+
+  if (driver81Fail) {
+    return (
+      <div className="text-center h2 text-danger m-5">
+        <p>Sending Feedback is currently offline</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -199,7 +239,6 @@ function FeedBack() {
                   </label>
                   <select
                     class="form-select"
-                    required
                     aria-label="select example"
                     onChange={(e) => setRating(e.target.value)}
                   >
@@ -210,7 +249,6 @@ function FeedBack() {
                     <option value="4">4</option>
                     <option value="5">5</option>
                   </select>
-                  <div class="invalid-feedback">Rating is required</div>
                 </div>
 
                 <div className=" mb-3 d-flex justify-content-around">
@@ -221,7 +259,7 @@ function FeedBack() {
                         handleRatingSubmit(e);
                         handleDriverRatingSubmit(e);
                         handleFeedbackSubmit(e);
-                    }}
+                      }}
                     >
                       Submit
                     </button>

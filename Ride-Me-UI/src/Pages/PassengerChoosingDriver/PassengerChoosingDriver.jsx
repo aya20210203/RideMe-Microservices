@@ -14,12 +14,16 @@ const PassengerChoosingDriver = () => {
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const [cities, setCities] = useState(null);
-  const [carTypes, setCarTypes] = useState();
+  const [carTypes, setCarTypes] = useState(null);
   const [drivers, setDrivers] = useState(null);
 
   const [filterCar, setFilterCar] = useState("");
   const [filterCity, setFilterCity] = useState("");
   const [filterSmoking, setFilterSmoking] = useState("");
+
+  const [driver81Fail, setDriver81Fail] = useState(false);
+  const [driver82Fail, setDriver82Fail] = useState(false);
+  const [driver83Fail, setDriver83Fail] = useState(false);
 
   useEffect(() => {
     // get initial drivers
@@ -30,15 +34,25 @@ const PassengerChoosingDriver = () => {
       .then((data) => {
         console.log(data);
         setDrivers(data);
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver83Fail(true);
+        }
+        console.error("Error:", error);
       });
     // get cities
     fetch("http://localhost:8082/Driver/get-cities")
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
-        console.log(data);
-        setCities(data);
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver82Fail(true);
+        }
+        console.error("Error:", error);
       });
     // get available car types
     fetch("http://localhost:8083/Driver/get-available-car-types")
@@ -48,6 +62,13 @@ const PassengerChoosingDriver = () => {
       .then((data) => {
         console.log(data);
         setCarTypes(data);
+      })
+      .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver83Fail(true);
+        }
+        console.error("Error:", error);
       });
   }, [_]);
 
@@ -69,6 +90,10 @@ const PassengerChoosingDriver = () => {
         setDrivers(data);
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver83Fail(true);
+        }
         console.error("Error:", error);
       });
   };
@@ -126,6 +151,10 @@ const PassengerChoosingDriver = () => {
         }
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setDriver81Fail(true);
+        }
         console.error("Error:", error);
       });
   };
@@ -156,8 +185,12 @@ const PassengerChoosingDriver = () => {
           }
         })
         .catch((error) => {
-          console.error("Error polling ride status:", error);
-          clearInterval(interval); // Stop polling on error
+          if (error instanceof TypeError) {
+            console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+            setDriver83Fail(true);
+            clearInterval(interval); // Stop polling on error
+          }
+          console.error("Error:", error);
         });
     };
 
@@ -168,8 +201,21 @@ const PassengerChoosingDriver = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (driver81Fail || driver82Fail || driver83Fail) {
+    return (
+      <div className="text-center h2 text-danger m-5">
+        <p>Sending Driver requests service is currently offline</p>
+      </div>
+    );
+  }
+
   return (
     <div>
+      {/* <p className="text-center h2 text-danger mt-4">
+        {" "}
+        {(driver81Fail || driver82Fail || driver83Fail) &&
+          "Sending Driver requests service is currently offline"}
+      </p> */}
       <div class="container cardChooseDriver my-4">
         <h1 className="fw-bold">Choose Driver</h1>
         <div class="row">

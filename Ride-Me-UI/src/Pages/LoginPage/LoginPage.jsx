@@ -12,6 +12,10 @@ const LoginPage = () => {
   const [redirectAdmin, setRedirectAdmin] = useState(false);
   const [failedLogin, setFailedLogin] = useState(null);
 
+  const [serviceFail1, setServiceFail1] = useState(null);
+  const [serviceFail2, setServiceFail2] = useState(null);
+  const [serviceFail3, setServiceFail3] = useState(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,8 +30,9 @@ const LoginPage = () => {
       .then((res) => {
         if (!res.ok) {
           setFailedLogin("Invalid credentials");
-          throw new Error("Failed to login as Driver");
+          throw new Error("Failed to login as driver");
         }
+
         setRedirectDriver(true);
         return res.json();
       })
@@ -41,6 +46,10 @@ const LoginPage = () => {
         sessionStorage.setItem("available", data.available);
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setServiceFail1(true);
+        }
         console.error("Error:", error);
       });
 
@@ -70,7 +79,10 @@ const LoginPage = () => {
         sessionStorage.setItem("Name", data.name);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setServiceFail2(true);
+        }
       });
 
     fetch(`http://localhost:8084/Admin/Login`, {
@@ -98,9 +110,23 @@ const LoginPage = () => {
         sessionStorage.setItem("roleId", data.id);
       })
       .catch((error) => {
+        if (error instanceof TypeError) {
+          console.log("It dint work connection failed aaaaaaaaaaaaaaa");
+          setServiceFail3(true);
+        }
         console.error("Error:", error);
       });
   };
+
+  if ((serviceFail1 || serviceFail2 || serviceFail3) && !failedLogin) {
+    return (
+      <div className="container">
+        <p className="text-danger display-3">
+          Login Service is currently offline
+        </p>
+      </div>
+    );
+  }
 
   if (redirectPassenger) {
     return <Redirect to="/passengerrequestride" />; // put redirect page here on successful registration
@@ -173,6 +199,10 @@ const LoginPage = () => {
                             Login
                           </button>
                         </div>
+
+                        <p className="display-5 text-danger">
+                          {failedLogin && failedLogin}
+                        </p>
 
                         <p>
                           Don't have an account?{" "}
